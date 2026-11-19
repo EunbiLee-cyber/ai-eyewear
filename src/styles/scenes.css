@@ -1,0 +1,848 @@
+/* ───────── 공통 스테이지 ───────── */
+.stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scene-dim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.scene-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.scene-title h2 {
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em; /* 자간으로 인한 시각적 중심 보정 */
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+.scene-title p {
+  font-size: 64px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  word-break: keep-all;
+}
+
+/* S02·S03·S04 타이틀 — HERO와 같은 폰트 스타일, 화면 높이 20%만큼 위로 */
+.scene-title--hero {
+  top: calc(-20vh + 30px);
+  bottom: calc(20vh - 30px);
+  font-family: "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, var(--font-ko);
+}
+
+.scene-title--hero h2 {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.scene-title--hero p {
+  font-size: 74px;
+  font-weight: 700;
+  line-height: calc(1.15em + 5px);
+  letter-spacing: 0.04em;
+  white-space: pre-line;
+  color: #ffffff;
+}
+
+/* ───────── S01 HERO ───────── */
+.hero {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-stage {
+  background: #000;
+  will-change: opacity, transform;
+}
+
+.hero-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* HERO 텍스트 레이어 — 영상 위 오버레이, 텍스트 위치의 기준 컨테이너 */
+.hero-copy {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+
+/* 기준 화면 1528 × 862px — 위치는 %, 글자 크기는 화면 폭 비례 */
+.hero-text {
+  position: absolute;
+  margin: 0;
+  font-family: "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, var(--font-ko);
+  font-size: calc(90 / 1528 * 100vw); /* 1528px에서 90px */
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  word-break: keep-all;
+  color: #ffffff;
+  background: none;
+  text-shadow: none;
+}
+
+.hero-side--left {
+  left: 28.3%;
+  top: 31.4%;
+  transform: translate(-50%, -50%);
+}
+
+.hero-side--right {
+  left: 71.5%;
+  top: 31.4%;
+  transform: translate(-50%, -50%);
+}
+
+.hero-side--center {
+  left: 50%;
+  top: 43%;
+  transform: translate(-50%, -50%);
+  letter-spacing: 0.2em;
+  padding-left: 0.2em; /* 마지막 글자 뒤 자간만큼 보정해 시각적 중앙 정렬 */
+}
+
+.hero-headline {
+  left: 2.4%;
+  bottom: calc(1.5% + 2px);
+  transform: none;
+  font-size: calc(25 / 1528 * 100vw); /* 1528px에서 25px */
+  letter-spacing: 0;
+}
+
+/* 모바일: 세로 화면에서 위치와 글자 크기 별도 조정 */
+@media (max-width: 767px) {
+  .hero-text {
+    font-size: 11vw;
+  }
+
+  .hero-side--left {
+    left: 50%;
+    top: 26%;
+  }
+
+  .hero-side--right {
+    left: 50%;
+    top: 38%;
+  }
+
+  .hero-side--center {
+    top: 32%;
+  }
+
+  .hero-headline {
+    left: 5%;
+    bottom: 4%;
+    font-size: 4.5vw;
+  }
+}
+
+/* ───────── S02 REINTERPRET ───────── */
+.reinterpret {
+  position: relative;
+  z-index: 1;
+}
+
+.reinterpret-stage {
+  background: var(--bg);
+}
+
+.reinterpret-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  touch-action: none;
+  user-select: none;
+}
+
+.reinterpret-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.explore-hint {
+  position: absolute;
+  top: 4.2vh;
+  left: 50%;
+  translate: -50% 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  margin-right: -0.32em;
+  color: #fff;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.explore-hint.is-visible {
+  animation: explore-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes explore-blink {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ───────── S02 하단 설명 ───────── */
+.reinterpret-note {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 80px 48px 160px;
+  background: #ffffff;
+}
+
+.reinterpret-note-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  /* 한글 폰트를 영문에도 써서 같은 굵기 600에서 영문만 두꺼워 보이지 않게 한다.
+     (Helvetica Neue는 600 웨이트가 없어 Bold로 렌더링된다.) */
+  font-family: var(--font-ko);
+}
+
+.reinterpret-note-headline {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.025em;
+  color: #777777;
+}
+
+.reinterpret-note-body {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.025em;
+  color: #777777;
+}
+
+.reinterpret-note-body strong {
+  font-weight: 600;
+  color: #777777;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .reinterpret-note {
+    padding: 64px 40px 110px;
+  }
+
+  .reinterpret-note-headline {
+    font-size: 21px;
+  }
+
+  .reinterpret-note-body {
+    font-size: 21px;
+  }
+}
+
+@media (max-width: 767px) {
+  .reinterpret-note {
+    padding: 48px 24px 88px;
+  }
+
+  .reinterpret-note-headline {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .reinterpret-note-body {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+}
+
+/* ───────── S03 REFRAME ───────── */
+.reframe {
+  position: relative;
+  z-index: 1;
+}
+
+.reframe-stage {
+  background: #000;
+}
+
+.reframe-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reframe-layer + .reframe-layer {
+  visibility: hidden;
+  will-change: mask-image;
+}
+
+.reframe-gauge {
+  position: absolute;
+  top: 50%;
+  right: 3.2vw;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+  pointer-events: none;
+}
+
+.reframe-gauge-label {
+  font-size: clamp(10px, 0.72vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.45);
+}
+
+.reframe-gauge-track {
+  position: relative;
+  width: 22px;
+  height: 38vh;
+  /* 중앙 축. 눈금은 .reframe-gauge-tick 요소로 그려 스크롤에 따라 정렬시킨다. */
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)) center / 1px
+    100% no-repeat;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.reframe-gauge-tick {
+  position: absolute;
+  left: 50%;
+  width: 9px;
+  height: 1px;
+  margin-left: -4.5px;
+  background: rgba(255, 255, 255, 0.6);
+  will-change: transform, opacity;
+}
+
+.reframe-gauge-marker {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.reframe-gauge-marker i {
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  height: 2px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* ───────── S04 REMEMBER / S05 ENDING ───────── */
+.remember {
+  position: relative;
+  z-index: 1;
+}
+
+.remember-stage {
+  background: #050505;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+  /* 카드의 z-index(1~2000)가 궤도 안에서만 비교되도록 묶는다.
+     → 암전(scene-dim)과 타이틀이 S02·S03처럼 이미지 위에 놓인다. */
+  isolation: isolate;
+}
+
+.orbit-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* 레이아웃 크기는 고정(선명도 기준)이고, 화면상의 크기·위치는 컴포넌트가 transform 으로 지정한다. */
+  width: 60vw;
+  aspect-ratio: 3 / 2;
+  translate: -50% -50%;
+  overflow: hidden;
+  border-radius: 0.9vw;
+  background: #111;
+  box-shadow: 0 1.5vw 5vw rgba(0, 0, 0, 0.5);
+  /* 진입 연출: 시계가 중앙에 도착한 뒤 나타난다(컴포넌트가 --orbit-cards 0~1 지정) */
+  opacity: var(--orbit-cards, 1);
+  will-change: transform, opacity;
+}
+
+/* S04 진입 메인 카피: S02·S03 설명 텍스트와 같은 타이포그래피 체계, 색상만 흰색 */
+.remember-copy {
+  position: absolute;
+  left: clamp(48px, 6.5vw, 128px);
+  top: clamp(64px, 12vh, 140px);
+  max-width: min(620px, 42vw);
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  font-family: var(--font-ko);
+  pointer-events: none;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.remember-copy-headline {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.remember-copy-body {
+  margin: 26px 0 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 1279px) {
+  .remember-copy-headline {
+    font-size: 30px;
+  }
+
+  .remember-copy-body {
+    font-size: 19px;
+  }
+}
+
+.orbit-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 실시간 아날로그 시계: 궤도 중심(화면 중앙)에 고정. 바늘 각도는 SVG transform 속성으로만 회전한다. */
+.orbit-clock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.clock-hour path {
+  fill: #e8ecef;
+}
+
+.clock-minute path {
+  fill: #dce2e5;
+}
+
+.clock-second line {
+  stroke: #d6dce0;
+  stroke-width: 1;
+}
+
+.clock-second rect {
+  fill: #d6dce0;
+}
+
+.clock-hub {
+  fill: url(#orbit-clock-hub);
+}
+
+.clock-hub-core {
+  fill: #1c1f21;
+}
+
+/* 우측 강조 구간 이미지의 기록 라벨: 카드 없는 annotation.
+   위치(transform)는 컴포넌트가 매 프레임 지정하고, 등장 시 약한 y 이동은 독립 속성 translate 로 처리한다. */
+.orbit-note {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  text-align: left;
+  white-space: pre;
+  pointer-events: none;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  translate: 0 6px;
+  /* 퇴장: 제자리에서 fade out → 완전히 사라진 뒤 아래로 되돌려 다음 등장을 준비 */
+  transition:
+    opacity var(--note-ms, 280ms) ease-out,
+    translate 0s linear var(--note-ms, 280ms);
+  will-change: transform, opacity;
+}
+
+.orbit-note.is-visible {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity var(--note-ms, 280ms) ease-out,
+    translate calc(var(--note-ms, 280ms) * 1.6) cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.orbit-note-when {
+  font-size: clamp(9px, 0.62vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.orbit-note-what {
+  font-size: clamp(13px, 0.95vw, 17px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-note,
+  .orbit-note.is-visible {
+    translate: 0 0;
+  }
+}
+
+.remember-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.hud-vignette,
+.ending-dim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hud-vignette {
+  background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.9) 100%);
+}
+
+.ending-dim {
+  background: #000;
+}
+
+.hud-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* ── S04 HUD: AI Bounding Box ─────────────────────────────
+   .hud-frame 은 .remember-video(object-fit: cover)의 실제 표시 영역과 같은 크기·위치.
+   → 박스·연결선·텍스트 좌표(영상 픽셀 기준 %)가 뷰포트 비율과 무관하게 피사체에 붙어 있다. */
+.hud-layer {
+  --hud-line: rgba(255, 255, 255, 0.25);
+  --hud-accent: #b0e1ce;
+  --hud-ink: #fff;
+  --hud-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  container-type: size;
+}
+
+.hud-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, 100cqh * 16 / 9);
+  height: max(100cqh, 100cqw * 9 / 16);
+  translate: -50% -50%;
+}
+
+.hud-target,
+.hud-rel {
+  position: absolute;
+  inset: 0;
+}
+
+/* 피사체를 감싸는 사각형: 1px 테두리만, 내부 투명 */
+.hud-box {
+  position: absolute;
+  border: 1px solid var(--hud-line);
+  transition: border-color var(--hud-ms, 520ms) var(--hud-ease);
+}
+
+.hud-target.is-active .hud-box {
+  border-color: var(--hud-accent);
+}
+
+/* 박스 → 텍스트 연결선: 활성 시 박스 쪽에서부터 그려진다 */
+.hud-link {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hud-link polyline {
+  fill: none;
+  stroke: var(--hud-accent);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset calc(var(--hud-ms, 520ms) * 0.8) var(--hud-ease);
+}
+
+.hud-target.is-active .hud-link polyline {
+  stroke-dashoffset: 0;
+  transition-delay: calc(var(--hud-ms, 520ms) * 0.2);
+}
+
+/* 외부 설명 텍스트: 박스 바깥, 활성 박스에만 표시. 크기는 박스와 독립(vw 기반) */
+.hud-label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--hud-ink);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--hud-ms, 520ms) var(--hud-ease);
+}
+
+.hud-label--right {
+  align-items: flex-end;
+  text-align: right;
+  translate: -100% 0;
+}
+
+.hud-label--above {
+  transform: translateY(-100%);
+}
+
+.hud-target.is-active .hud-label {
+  opacity: 1;
+  transition-delay: calc(var(--hud-ms, 520ms) * 0.55);
+}
+
+.hud-title {
+  display: flex;
+  gap: 1em;
+  font-size: clamp(9px, 0.66vw, 12px);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+}
+
+.hud-title b {
+  font-weight: 500;
+  color: var(--hud-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-value {
+  font-size: clamp(18px, 1.6vw, 30px);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+}
+
+.hud-caption {
+  font-size: clamp(9px, 0.6vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.24em;
+}
+
+/* MEMORY LOG: 영상(=화면) 가장자리에 고정되는 작은 기록 정보 */
+.hud-log {
+  position: absolute;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: clamp(9px, 0.6vw, 11px);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: var(--hud-ink);
+  font-variant-numeric: tabular-nums;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.hud-log dt b {
+  margin-left: 0.6em;
+  font-weight: 500;
+  color: var(--hud-accent);
+}
+
+.hud-log dd {
+  margin: 0;
+  display: flex;
+  gap: 1.4em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-box,
+  .hud-link polyline,
+  .hud-label {
+    transition-duration: 1ms;
+    transition-delay: 0ms;
+  }
+}
+
+.ending-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.ending-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: clamp(48px, 6.6vw, 140px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.04;
+  color: #fff;
+}
+
+.ending-headline span {
+  display: block;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.ending-promise {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7vh;
+  font-size: clamp(14px, 1.25vw, 24px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #fff;
+  visibility: hidden;
+}
+
+/* ───────── PRODUCT PANEL ───────── */
+.product {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  align-items: center;
+  background: #0c0b0a;
+  overflow: hidden;
+}
+
+.product-copy {
+  padding-left: 7.2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.6vw;
+  /* 헤드라인 너비에 맞춰 CTA를 '요' 끝에 우측정렬 */
+  width: fit-content;
+}
+
+.product-headline {
+  font-size: clamp(30px, 3.3vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  word-break: keep-all;
+}
+
+.product-cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: 10px;
+  font-size: clamp(14px, 1.1vw, 20px);
+  letter-spacing: 0.02em;
+  cursor: default;
+  user-select: none;
+}
+
+.product-cta svg {
+  width: 0.5em;
+  height: 1.1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.product-visual {
+  height: 100%;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  padding-right: 3vw;
+}
+
+.product-visual img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  aspect-ratio: 4 / 3; /* 원본 비율과 동일 → 마스크 좌표가 이미지 기준이 된다 */
+  object-fit: contain;
+  /* 제품 이미지는 불투명 배경이라, 가장자리를 패널 배경으로 녹여 안경만 남긴다. */
+  -webkit-mask-image: radial-gradient(ellipse 50% 27% at 51% 47%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 27% at 51% 47%, #000 62%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-card {
+    box-shadow: none;
+  }
+}
